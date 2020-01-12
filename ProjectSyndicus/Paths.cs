@@ -4,7 +4,8 @@ namespace ProjectSyndicus
 {
     static class Paths
     {
-        public const String DataPath = "Data/";
-        public const String ConfigFile = DataPath + "config.txt";
+        public const string DataPath = "Data/";
+        public const string ConfigFile = DataPath + "config.txt";
+        public const string GfxPath = DataPath + "Gfx/";
     }
 }

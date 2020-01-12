@@ -1,15 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 
 namespace ProjectSyndicus.Screens
 {
-    abstract class Screen
+    public abstract class Screen
     {
-        public abstract void Start();
-        public abstract void Stop();
-        public abstract void Update();
-        public abstract void Input();
-        public abstract void Render();
+        protected readonly SyndicusGame game;
+
+        protected Screen(SyndicusGame game)
+        {
+            this.game = game;
+        }
+
+        public virtual void Start() { }
+        public virtual void Stop() { }
+        public virtual void Update(GameTime gameTime) { }
+        public virtual void Input() { }
+        public virtual void Render(SpriteBatch spriteBatch) { }
     }
 }
