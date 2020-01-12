@@ -4,10 +4,11 @@ namespace ProjectSyndicus
 {
     class Program
     {
-        static void Main(string[] args)
+        [STAThread]
+        static void Main()
         {
-            var engine = new Engine();
-            engine.Start();
+            using (var game = new Game1())
+                game.Run();
         }
     }
 }
