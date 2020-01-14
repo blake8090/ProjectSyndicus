@@ -1,8 +1,8 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Nett;
 using ProjectSyndicus.Screens;
 using Serilog;
-using System;
 using System.IO;
 
 namespace ProjectSyndicus
@@ -14,7 +14,8 @@ namespace ProjectSyndicus
 
         private Screen currentScreen;
 
-        public Assets assets;
+        public Assets assets { get; private set; }
+        public Config config { get; private set; }
 
         public Screen CurrentScreen
         {
@@ -31,9 +32,15 @@ namespace ProjectSyndicus
         {
             SetupLogging();
 
-            graphicsDeviceManager = new GraphicsDeviceManager(this);
-
-            // TODO: load config
+            // TODO: handle case where config file is missing
+            config = Toml.ReadFile<Config>(Paths.ConfigFile);
+            graphicsDeviceManager = new GraphicsDeviceManager(this)
+            {
+                PreferredBackBufferWidth = config.ScreenWidth,
+                PreferredBackBufferHeight = config.ScreenHeight,
+                IsFullScreen = config.Fullscreen
+            };
+            graphicsDeviceManager.ApplyChanges();
 
             Content.RootDirectory = "Data";
             IsMouseVisible = true;
