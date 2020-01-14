@@ -34,7 +34,7 @@ namespace ProjectSyndicus.Screens
 
             foreach (var file in texFiles)
             {
-                game.assets.LoadTexture(file);
+                game.Assets.LoadTexture(file);
             }
         }
 

@@ -11,11 +11,8 @@ namespace ProjectSyndicus.Screens
 
         public override void Render(SpriteBatch spriteBatch)
         {
-            var tex = game.assets.GetTexture("floor");
-            if (tex != null)
-            {
-                spriteBatch.Draw(tex, new Vector2(0, 0), Color.White);
-            }
+            game.Assets.WithTexture("floor", 
+                tex => spriteBatch.Draw(tex, new Vector2(0, 0), Color.White));
         }
     }
 }

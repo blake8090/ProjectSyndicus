@@ -45,5 +45,14 @@ namespace ProjectSyndicus
         {
             return textures[name];
         }
+
+        public void WithTexture(string name, Action<Texture2D> func)
+        {
+            var texture = GetTexture(name);
+            if (texture != null)
+            {
+                func.Invoke(texture);
+            }
+        }
     }
 }

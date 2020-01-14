@@ -14,8 +14,8 @@ namespace ProjectSyndicus
 
         private Screen currentScreen;
 
-        public Assets assets { get; private set; }
-        public Config config { get; private set; }
+        public Assets Assets { get; private set; }
+        public Config Config { get; private set; }
 
         public Screen CurrentScreen
         {
@@ -33,12 +33,12 @@ namespace ProjectSyndicus
             SetupLogging();
 
             // TODO: handle case where config file is missing
-            config = Toml.ReadFile<Config>(Paths.ConfigFile);
+            Config = Toml.ReadFile<Config>(Paths.ConfigFile);
             graphicsDeviceManager = new GraphicsDeviceManager(this)
             {
-                PreferredBackBufferWidth = config.ScreenWidth,
-                PreferredBackBufferHeight = config.ScreenHeight,
-                IsFullScreen = config.Fullscreen
+                PreferredBackBufferWidth = Config.ScreenWidth,
+                PreferredBackBufferHeight = Config.ScreenHeight,
+                IsFullScreen = Config.Fullscreen
             };
             graphicsDeviceManager.ApplyChanges();
 
@@ -49,7 +49,7 @@ namespace ProjectSyndicus
         protected override void LoadContent()
         {
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            assets = new Assets(GraphicsDevice);
+            Assets = new Assets(GraphicsDevice);
 
             // Loads all assets up front
             LoadingScreen loadingScreen = new LoadingScreen(this);
