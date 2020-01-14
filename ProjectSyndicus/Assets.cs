@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework.Graphics;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -20,25 +21,24 @@ namespace ProjectSyndicus
             string assetName = Path.GetFileNameWithoutExtension(fileName);
             if (textures.ContainsKey(assetName))
             {
-                Console.WriteLine($"Duplicate texture '{assetName}' will not be loaded");
+                Log.Debug($"Duplicate texture '{assetName}' will not be loaded");
             }
-            else if (File.Exists(fileName))
+            else if (!File.Exists(fileName))
+            {
+                Log.Debug($"Cannot load texture: file '{fileName}' does not exist");
+            }
+            else
             {
                 try
                 {
-                    using (var fileStream = new FileStream(fileName, FileMode.Open))
-                    {
-                        Texture2D texture = Texture2D.FromStream(graphicsDevice, fileStream);
-                        textures[assetName] = texture;
-                    }
+                    using var fileStream = new FileStream(fileName, FileMode.Open);
+                    textures[assetName] = Texture2D.FromStream(graphicsDevice, fileStream);
                 }
                 catch (Exception e)
                 {
-                    // TODO: use logger
-                    Console.WriteLine($"Could not load texture '{fileName}'");
+                    Log.Error(e, $"Could not load texture '{fileName}'");
                 }
             }
-            // TODO: log error when file does not exist
         }
 
         public Texture2D GetTexture(string name)

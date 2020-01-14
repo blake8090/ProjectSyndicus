@@ -1,4 +1,5 @@
 ﻿using Microsoft.Xna.Framework;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -18,7 +19,7 @@ namespace ProjectSyndicus.Screens
 
         public override void Start()
         {
-            Console.WriteLine("Loading screen start");
+            Log.Debug("Loading screen start");
             new Thread(() =>
             {
                 LoadAllTextures();
@@ -28,14 +29,24 @@ namespace ProjectSyndicus.Screens
 
         private void LoadAllTextures()
         {
-            string[] texFiles = Directory.GetFiles(Paths.GfxPath, "*.png",
-                         SearchOption.TopDirectoryOnly);
-            Console.WriteLine($"found {texFiles.Length} textures to load.");
+            List<string> texFiles = GetAllFilesWithExtensions(Paths.GfxPath, "*.png", "*.bmp");
+            Log.Debug($"found {texFiles.Count} textures to load.");
 
             foreach (var file in texFiles)
             {
                 game.assets.LoadTexture(file);
             }
+        }
+
+        // TODO: fix this up to automatically include wildcards
+        private List<string> GetAllFilesWithExtensions(string path, params string[] extensions)
+        {
+            List<string> files = new List<string>();
+            foreach (var extension in extensions)
+            {
+                files.AddRange(Directory.GetFiles(Paths.GfxPath, extension, SearchOption.AllDirectories));
+            }
+            return files;
         }
     }
 }

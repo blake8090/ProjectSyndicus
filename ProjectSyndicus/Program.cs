@@ -7,8 +7,7 @@ namespace ProjectSyndicus
         [STAThread]
         static void Main()
         {
-            using (var game = new SyndicusGame())
-                game.Run();
+            new SyndicusGame().Run();
         }
     }
 }

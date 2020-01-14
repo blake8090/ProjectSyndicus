@@ -1,7 +1,9 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using ProjectSyndicus.Screens;
+using Serilog;
 using System;
+using System.IO;
 
 namespace ProjectSyndicus
 {
@@ -27,6 +29,8 @@ namespace ProjectSyndicus
 
         public SyndicusGame()
         {
+            SetupLogging();
+
             graphicsDeviceManager = new GraphicsDeviceManager(this);
 
             // TODO: load config
@@ -44,10 +48,17 @@ namespace ProjectSyndicus
             LoadingScreen loadingScreen = new LoadingScreen(this);
             loadingScreen.OnLoadingComplete += () =>
             {
-                Console.WriteLine("Loading has completed.");
+                Log.Information("Loading has completed.");
                 currentScreen = new TestScreen(this);
             };
             CurrentScreen = loadingScreen;
+        }
+
+        protected override void UnloadContent()
+        {
+            Log.Information("Shutting down");
+            Log.CloseAndFlush();
+            base.UnloadContent();
         }
 
         protected override void Update(GameTime gameTime)
@@ -67,6 +78,24 @@ namespace ProjectSyndicus
             spriteBatch.End();
 
             base.Draw(gameTime);
+        }
+
+        private void SetupLogging()
+        {
+            File.Delete(Paths.LogFile);
+
+            string outputTemplate = "{Timestamp:HH:mm:ss} [{Level:u3}] {Message:lj}{NewLine}{Exception}";
+            Log.Logger = new LoggerConfiguration()
+#if DEBUG
+                .MinimumLevel.Debug()
+#else
+                .MinimumLevel.Information()
+#endif
+                .WriteTo.File(Paths.LogFile, outputTemplate: outputTemplate, fileSizeLimitBytes: 100_000_000, rollOnFileSizeLimit: true)
+                .WriteTo.Console(outputTemplate: outputTemplate)
+                .CreateLogger();
+
+            Log.Debug("Logging initialized");
         }
     }
 }
