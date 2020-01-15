@@ -1,9 +1,4 @@
-﻿using Microsoft.Xna.Framework;
-using Serilog;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
+﻿using Serilog;
 using System.Threading;
 
 namespace ProjectSyndicus.Screens

@@ -56,7 +56,7 @@ namespace ProjectSyndicus
             loadingScreen.OnLoadingComplete += () =>
             {
                 Log.Information("Loading has completed.");
-                currentScreen = new TestScreen(this);
+                CurrentScreen = new GameScreen(this);
             };
             CurrentScreen = loadingScreen;
         }
