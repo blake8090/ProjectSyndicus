@@ -12,12 +12,11 @@ namespace ProjectSyndicus.Screens
 
         public override void Start()
         {
-            // TODO: load tile definitions from file using Assets
-            var tile = new Tile("floor", false);
-            world.SetTile(0, 0, tile);
-            world.SetTile(0, 1, tile);
-            world.SetTile(1, 0, tile);
-            world.SetTile(1, 1, tile);
+            TileSet tileSet = game.Assets.TileSet;
+            world.SetTile(0, 0, tileSet.GetTile("floor"));
+            world.SetTile(0, 1, tileSet.GetTile("floor"));
+            world.SetTile(1, 0, tileSet.GetTile("floor"));
+            world.SetTile(1, 1, tileSet.GetTile("floor"));
         }
 
         public override void Render(SpriteBatch spriteBatch)

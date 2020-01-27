@@ -11,6 +11,8 @@ namespace ProjectSyndicus
         private GraphicsDevice graphicsDevice;
         private readonly Dictionary<string, Texture2D> textures = new Dictionary<string, Texture2D>();
 
+        public TileSet TileSet { get; private set; } = new TileSet();
+
         public Assets(GraphicsDevice graphicsDevice)
         {
             this.graphicsDevice = graphicsDevice;

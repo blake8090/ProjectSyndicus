@@ -6,7 +6,7 @@ namespace ProjectSyndicus
 {
     public class World
     {
-        private Dictionary<Point, Tile> tiles = new Dictionary<Point, Tile>();
+        private readonly Dictionary<Point, Tile> tiles = new Dictionary<Point, Tile>();
         // TODO: dictionary of entities
 
         public void SetTile(int x, int y, Tile tile)
