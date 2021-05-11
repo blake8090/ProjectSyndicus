@@ -1,5 +1,0 @@
-18:00:32 [DBG] Logging initialized
-18:00:32 [DBG] Loading screen start
-18:00:32 [DBG] found 3 textures to load.
-18:00:32 [INF] Loading has completed.
-18:00:36 [INF] Shutting down
