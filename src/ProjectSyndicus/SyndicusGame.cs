@@ -9,56 +9,57 @@ namespace ProjectSyndicus
 {
     public class SyndicusGame : Game
     {
-        private readonly GraphicsDeviceManager graphicsDeviceManager;
-        private SpriteBatch spriteBatch;
-
-        private Screen currentScreen;
-
+        private readonly GraphicsDeviceManager _graphicsDeviceManager;
+        private SpriteBatch _spriteBatch;
+        
         public Assets Assets { get; private set; }
         public Config Config { get; private set; }
 
+        // TODO: move to separate class
+        private Screen _currentScreen;
         public Screen CurrentScreen
         {
-            get => currentScreen;
+            get => _currentScreen;
             set
             {
-                currentScreen?.Stop();
-                currentScreen = value;
-                currentScreen?.Start();
+                _currentScreen?.Stop();
+                _currentScreen = value;
+                _currentScreen?.Start();
             }
         }
 
         public SyndicusGame()
         {
+            _graphicsDeviceManager = new GraphicsDeviceManager(this);
+        }
+
+        protected override void Initialize()
+        {
             SetupLogging();
 
             // TODO: handle case where config file is missing
             Config = Toml.ReadFile<Config>(Paths.ConfigFile);
-            graphicsDeviceManager = new GraphicsDeviceManager(this)
-            {
-                PreferredBackBufferWidth = Config.ScreenWidth,
-                PreferredBackBufferHeight = Config.ScreenHeight,
-                IsFullScreen = Config.Fullscreen
-            };
-            graphicsDeviceManager.ApplyChanges();
 
-            Content.RootDirectory = "Data";
+            _graphicsDeviceManager.PreferredBackBufferWidth = Config.ScreenWidth;
+            _graphicsDeviceManager.PreferredBackBufferHeight = Config.ScreenHeight;
+            _graphicsDeviceManager.IsFullScreen = Config.Fullscreen;
+            _graphicsDeviceManager.ApplyChanges();
+
+            _spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            Assets = new Assets(GraphicsDevice);
+            
             IsMouseVisible = true;
+
+            base.Initialize();
         }
 
         protected override void LoadContent()
         {
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-            Assets = new Assets(GraphicsDevice);
+            Content.RootDirectory = "data";
 
-            // Loads all assets up front
-            LoadingScreen loadingScreen = new LoadingScreen(this);
-            loadingScreen.OnLoadingComplete += () =>
-            {
-                Log.Information("Loading has completed.");
-                CurrentScreen = new GameScreen(this);
-            };
-            CurrentScreen = loadingScreen;
+            Assets.Load();
+            CurrentScreen = new GameScreen(this);
         }
 
         protected override void UnloadContent()
@@ -70,8 +71,8 @@ namespace ProjectSyndicus
 
         protected override void Update(GameTime gameTime)
         {
-            currentScreen?.Input();
-            currentScreen?.Update(gameTime);
+            _currentScreen?.Input();
+            _currentScreen?.Update(gameTime);
 
             base.Update(gameTime);
         }
@@ -80,9 +81,9 @@ namespace ProjectSyndicus
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
-            spriteBatch.Begin();
-            currentScreen?.Render(spriteBatch);
-            spriteBatch.End();
+            _spriteBatch.Begin();
+            _currentScreen?.Render(_spriteBatch);
+            _spriteBatch.End();
 
             base.Draw(gameTime);
         }
